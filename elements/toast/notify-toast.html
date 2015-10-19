@@ -1,0 +1,33 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+These code is property of IceSoft company, VietNam
+-->
+
+<dom-module id="notify-toast">
+
+<template>
+    <paper-toast id="notifyToast" text="{{textContent}}">
+    </paper-toast>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'notify-toast',
+      properties: {
+        textContent: String
+      },
+
+      observers: [
+	    'showToast(textContent)'
+	  ],	
+
+      showToast: function(message){
+    	  var notifyToast = document.querySelector('#notifyToast');
+    	  notifyToast.text = message;
+    	  notifyToast.show();
+      }
+    });
+  </script>
+
+</dom-module>

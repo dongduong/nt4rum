@@ -1,0 +1,173 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+Theses code is property of IceSoft company, VietNam
+-->
+<dom-module id="setting-page">
+
+  <style>
+
+    .container {
+      height: 90vh;
+    }
+
+    #settingPanel{
+      width: 100%;
+      height: 100%;
+    }
+
+    .paper-header {
+        height: 60px;
+        font-size: 16px;
+        line-height: 60px;
+        padding: 0 10px;
+        color: white;
+        transition: height 0.2s;
+      }
+
+    .blue .paper-header {
+        background-color: var(--paper-light-blue-500);
+      }
+
+    .content {
+        height: 2000px;
+      }
+
+    .paper-header.has-shadow  .tabs {
+      margin-left: 50px;
+      margin-bottom: 0;
+    }  
+
+    paper-tab a {
+      text-decoration: none;
+      color: var(--tab-link-color);
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      -ms-flex-direction: row;
+      -webkit-flex-direction: row;
+      flex-direction: row;
+      -ms-flex-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      font-family: 'Roboto', 'Noto', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 24px;
+      min-height: 48px;
+      padding: 0 16px;
+    }
+
+    paper-tab iron-icon {
+      margin-right: 10px;
+      opacity: 0.84;
+    }
+
+  </style>
+  
+  <template>
+    <!-- local DOM for your element -->
+
+   <!--  <paper-tabs selected="0" noink>
+      <paper-tab>General</paper-tab>
+      <paper-tab>Security</paper-tab>
+      <paper-tab>Themes</paper-tab>
+      <paper-tab>Keyboard</paper-tab>
+    </paper-tabs> -->
+    <div class="container" layout vertical center>
+      <paper-header-panel id="settingPanel" mode="waterfall" class="blue" on-content-scroll="scrollHandler">
+        <div class="paper-header">
+              <paper-tabs selected="0" noink>
+                <paper-tab link>
+                  <a route="setting" href="{{urlFor('setting')}}">
+                    <iron-icon icon="settings"></iron-icon>
+                    <span>General</span>
+                  </a>
+                </paper-tab>
+                <paper-tab link>
+                  <a route="setting-security" href="{{urlFor('setting-security')}}">
+                    <iron-icon icon="hardware:security"></iron-icon>
+                    <span>Security</span>
+                  </a>
+                </paper-tab>
+                <paper-tab link>
+                  <a route="setting-theme" href="{{urlFor('setting-theme')}}">
+                    <iron-icon icon="image:color-lens"></iron-icon>
+                    <span>Theme</span>
+                  </a>
+                </paper-tab>
+                <paper-tab link>
+                  <a route="setting-keyboard" href="{{urlFor('setting-keyboard')}}">
+                    <iron-icon icon="hardware:keyboard"></iron-icon>
+                    <span>Keyboard</span>
+                  </a>
+                </paper-tab>
+              </paper-tabs>
+        </div>
+        <div class="content">
+          <!-- <paper-material elevation="1">
+             <h2 class="paper-font-display2">Settings</h2>
+             <p>This is the settings section</p >
+          </paper-material> -->
+          <more-route-selector>
+              <iron-pages>
+                <section route="setting">
+                  <paper-material elevation="1">
+                     <h2 class="paper-font-display2">General</h2>
+                     <p>This is the General section</p >
+                  </paper-material>
+                </section>
+                <section route="setting-security">
+                  <paper-material elevation="1">
+                     <h2 class="paper-font-display2">Security</h2>
+                     <p>This is the Security section</p >
+                  </paper-material>
+                </section>
+                <section route="setting-theme">
+                  <paper-material elevation="1">
+                     <h2 class="paper-font-display2">Theme</h2>
+                     <p>This is the Theme section</p >
+                  </paper-material>
+                </section>
+                <section route="setting-keyboard">
+                  <paper-material elevation="1">
+                     <h2 class="paper-font-display2">Keyboard</h2>
+                     <p>This is the Keyboard section</p >
+                  </paper-material>
+                </section>
+              </iron-pages>
+          </more-route-selector>
+        </div>
+      </paper-header-panel>
+    </div>
+
+    <!-- <paper-material elevation="1">
+       <h2 class="paper-font-display2">Settings</h2>
+       <p>This is the settings section</p >
+    </paper-material> -->
+  </template>
+
+  <script>
+    // element registration
+    Polymer({
+      is: "setting-page",
+
+      // add properties and methods on the element's prototype
+
+      properties: {
+        // declare properties for the element's public API
+        greeting: {
+          type: String,
+          value: "Hello!"
+        }
+      },
+
+      urlFor: function(page) {
+        return MoreRouting.urlFor(page);
+      }
+    });
+  </script>
+
+</dom-module>

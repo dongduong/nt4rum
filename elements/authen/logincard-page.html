@@ -1,0 +1,303 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+These code is property of IceSoft company, VietNam
+-->
+
+<dom-module id="logincard-page">
+<link rel="import" type="css" href="./logincard.css">
+
+<style is="custom-style">
+:root {
+        /* Label and underline color when the input is focused */
+        --paper-input-container-focus-color: #ed2553;
+}
+
+ .card .button-container paper-button {
+ 	outline: 0;
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+  background: 0;
+  width: 240px;
+  border: 2px solid #e3e3e3;
+  color: #e3e3e3;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1;
+  text-transform: uppercase;
+  overflow: hidden;
+  -webkit-transition: .3s ease;
+          transition: .3s ease;
+
+ }
+
+.card .button-container paper-button:hover, .card .button-container paper-button:active, .card .button-container paper-button:focus {
+   border-color: #ed2553;
+   color: #ed2553;
+}
+
+.card .button-container paper-button:active:before, .card .button-container paper-button:focus:before {
+  opacity: 1;
+  -webkit-transform: scale(10);
+  -ms-transform: scale(10);
+  transform: scale(10);
+}
+
+.card.alt paper-fab {
+  position: relative;
+  background: #ed2553;
+  width: 140px;
+  height: 140px;
+  border-radius: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  color: #ffffff;
+  font-size: 58px;
+  line-height: 140px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.card.alt paper-fab:before {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-transform: translate(0, 0);
+      -ms-transform: translate(0, 0);
+          transform: translate(0, 0);
+}
+
+.container.active .card.alt paper-fab {
+  position: absolute;
+  top: 40px;
+  right: -70px;
+  box-shadow: none;
+  -webkit-transform: scale(10);
+  -ms-transform: scale(10);
+  transform: scale(10);
+  -webkit-transition: -webkit-transform .3s ease;
+          transition: transform .3s ease;
+}
+
+.container.active .card.alt paper-fab:before {
+  content: '';
+}
+
+.card.alt .title .close iron-icon {
+	--iron-icon-width: 40px;
+	--iron-icon-height: 40px;
+}
+
+#facebookFab, #twitterFab, #googleFab {
+  position: fixed;
+  bottom: 30px;	
+  right: 30px;
+  background: #fff;
+  border-radius: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  -webkit-transition: 0.3s ease;
+  transition: 0.3s ease;
+  color: #ffffff;
+  text-align: center;
+}
+
+#fabRegister {
+	--iron-icon-height: 64px;
+  --iron-icon-width: 64px;
+}
+
+#facebookFab {
+  --iron-icon-height: 58px;
+  --iron-icon-width: 58px;
+}
+
+#twitterFab {
+  --iron-icon-height: 64px;
+  --iron-icon-width: 64px;
+
+  bottom: 96px;	
+  right: 30px;
+  -webkit-animation: buttonFadeInUp 1s ease;
+  animation: buttonFadeInUp 1s ease;
+  }
+
+#googleFab {
+  --iron-icon-height: 64px;
+  --iron-icon-width: 64px;
+
+  bottom: 162px;	
+  right: 30px;
+  -webkit-animation: buttonFadeInUp 1s ease;
+  animation: buttonFadeInUp 1s ease;
+}
+
+</style>
+
+
+<template id="loginCardTemplate">
+<div id="loginCard" class="container">
+  <div class="card"></div>
+  <div class="card">
+    <h1 class="title">Login</h1>
+    <form>
+
+      <div class="input-container">
+        <paper-input-container>
+		  <label>Username</label>
+		  <input autofocus is="iron-input" bind-value="{{username}}">
+		</paper-input-container>
+      </div>	
+      <div class="input-container">
+        <paper-input-container>
+		  <label>Password</label>
+		  <input type="password" is="iron-input" bind-value="{{password}}">
+		</paper-input-container>
+      </div>
+      <div class="button-container">
+        <paper-button raised on-click="clickLogin">Go</paper-button>
+      </div>
+      <div class="footer"><a href="#">Forgot your password?</a></div>
+    </form>
+  </div>
+  <div id="registerCard" class="card alt">
+    <!-- <div class="toggle"> -->
+    	<paper-fab id="fabRegister" icon="create" on-click="clickRegister"></paper-fab>
+    <!-- </div> -->
+    <h1 class="title">Register
+      <div class="close">
+      	<iron-icon icon="close" on-click="clickCloseRegister"></iron-icon>
+      </div>
+    </h1>
+    <form>
+      <div class="input-container">
+        <paper-input-container>
+		  <label>Username</label>
+		  <input is="iron-input" bind-value="{{createUsername}}">
+		</paper-input-container>
+      </div>
+      <div class="input-container">
+        <paper-input-container>
+		  <label>Password</label>
+		  <input type="password" is="iron-input" bind-value="{{createPassword}}">
+		</paper-input-container>
+      </div>
+      <div class="input-container">
+        <paper-input-container>
+		  <label>Repeat Password</label>
+		  <input type="password" is="iron-input" bind-value="{{createRepeatPassword}}">
+		</paper-input-container>
+      </div>
+      <div class="button-container">
+        <paper-button raised on-click="clickNext">Next</paper-button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<paper-fab title="Sign in with Google+" id="googleFab" src="../../images/icons/google_circle.png" on-click="clickLoginAsGooglePlus"></paper-fab>
+<paper-fab title="Sign in with Twitter" id="twitterFab" src="../../images/icons/twitter_circle.png" on-click="clickLoginAsTwitter"></paper-fab>
+<paper-fab title="Sign in with Facebook" id="facebookFab" src="../../images/icons/facebook_circle.png" on-click="clickLoginAsFacebook"></paper-fab>
+
+<!-- <system-toast id="loginToast" textContent="Login...."></paper-toast> -->
+</template>
+  <script>
+    // element registration
+    Polymer({
+      is: "logincard-page",
+
+      //add properties and methods on the element's prototype
+
+      properties: {
+        // declare properties for username and password
+        username: String,
+        password: String,
+        createUsername:String,
+        createPassword:String,
+        createRepeatPassword:String
+      },
+
+       ready: function() {
+        this.username="";
+        this.password="";
+        this.createUsername="";
+        this.createPassword="";
+        this.createRepeatPassword="";
+      },
+
+     //  checkUserCookie: function() {
+     //    var cookieValue = cookieManager.checkUserCookie();
+     //    if (cookieValue){
+	    //   	this.fire('login');
+	    // }
+     //  },
+
+      clickLogin: function() {
+      	userManager.authWithPassword(this.username, this.password);
+      },
+
+      clickLoginAsOAuth: function(provider) {
+      	userManager.authWithOAuth(provider);
+      },
+
+      clickLoginAsFacebook: function() {
+      	this.clickLoginAsOAuth("facebook");
+      },
+
+      clickLoginAsTwitter: function() {
+      	this.clickLoginAsOAuth("twitter");
+      },
+
+      clickLoginAsGooglePlus: function() {
+      	this.clickLoginAsOAuth("google");
+      },
+
+      clickRegister:function() {
+      	this.resetRegisterCard();
+
+      	var loginCard = document.getElementById("loginCard");
+      	loginCard.classList.add("active");
+
+      	var fabRegister = document.getElementById("fabRegister");
+      	fabRegister.icon="";
+      },
+
+      clickCloseRegister:function() {
+      	this.resetLoginCard();
+      	
+      	var loginCard = document.getElementById("loginCard");
+      	loginCard.classList.remove("active");
+
+      	var fabRegister = document.getElementById("fabRegister");
+      	fabRegister.icon="create";
+      },
+
+      clickNext: function() {
+      	//TODO : verify password and repeat-password
+      	//TODO : click next to show some behaviors, setup avatar... something like this
+      	this.createNewUser();
+      },
+
+      createNewUser: function() {
+      	userManager.createUser(this.createUsername, this.createPassword);
+      },
+
+      resetLoginCard: function() {
+      	this.username="";
+        this.password="";
+      },
+
+      resetRegisterCard: function() {
+      	this.createUsername="";
+        this.createPassword="";
+        this.createRepeatPassword="";
+      }
+
+    });
+
+  </script>
+
+
+</dom-module>

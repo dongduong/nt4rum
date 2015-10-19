@@ -1,0 +1,49 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+Theses code is property of IceSoft company, VietNam
+-->
+<dom-module id="cookie-manager">
+
+  <style>
+    /* CSS rules for your element */
+  </style>
+  
+  <template>
+    <!-- local DOM for your element -->
+
+    <polymer-cookie name="user_nt4rum" id="userCookie"></polymer-cookie>
+  </template>
+
+  <script>
+    // element registration
+    Polymer({
+      is: "cookie-manager",
+
+      // add properties and methods on the element's prototype
+
+      properties: {
+        // declare properties for the element's public API
+        userCookie: Object
+      },
+
+      ready: function() {
+        userCookie = document.getElementById('userCookie');
+      },
+
+      setUserCookie: function(value) {
+        userCookie = document.getElementById('userCookie');
+        userCookie.value = value;
+        userCookie.expires = 'Fri, 31 Dec 9999 23:59:59 GMT';
+      },
+
+      checkUserCookie: function() {
+        userCookie = document.getElementById('userCookie');
+        console.log(userCookie.value);
+        return userCookie.value;
+      }
+
+    });
+  </script>
+
+</dom-module>

@@ -1,0 +1,20 @@
+
+<link rel="import" href="../bower_components/more-routing/more-routing.html">
+<more-routing-config driver="hash"></more-routing-config>
+
+
+<more-route name="login" path="/login"></more-route>
+<more-route name="home" path="/"></more-route>
+<more-route name="article" path="/article"></more-route>
+<more-route name="users" path="/users">
+	<more-route name="user-timeline" path="/:name"></more-route>
+	<more-route name="user-about" path="/:name/about"></more-route>
+	<more-route name="user-friend" path="/:name/friend"></more-route>
+	<more-route name="user-photo" path="/:name/photo"></more-route>
+</more-route>
+<more-route name="contact" path="/contact"></more-route>
+<more-route name="setting" path="/general">
+	<more-route name="setting-security" path="/security"></more-route>
+	<more-route name="setting-theme" path="/theme"></more-route>
+	<more-route name="setting-keyboard" path="/keyboard"></more-route>
+</more-route>

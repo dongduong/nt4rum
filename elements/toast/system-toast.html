@@ -1,0 +1,171 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+These code is property of IceSoft company, VietNam
+-->
+
+<dom-module id="system-toast">
+  <style>
+  	:host {
+      margin: 0;
+	  background: hsla(0,0%,0%,1);
+	  overflow: hidden;
+    }
+
+    #systemText {
+    	margin: 0;
+    	position: absolute;
+    	top: 0px;
+    	left: 0px;
+    }
+  </style>
+
+  <template>
+    <content></content>
+
+    <paper-toast id="systemToast">
+    	<span role="text">
+    		<canvas id="systemText">{{textContent}}</canvas>
+    	</span>
+    </paper-toast>
+  </template>
+
+  <script>
+  	window.requestAnimFrame = (function() {
+	  return window.requestAnimationFrame ||
+	    window.webkitRequestAnimationFrame ||
+	    window.mozRequestAnimationFrame ||
+	    window.oRequestAnimationFrame ||
+	    window.msRequestAnimationFrame ||
+	    function(callback) {
+	      window.setTimeout(callback, 1000 / 60);
+	    };
+	})();
+
+
+	var x = 0; 
+	var y = 0; 
+	var w = window.innerWidth;	
+	var h = window.innerHeight;
+	var resume;
+	var myReq;
+	var stop = 0;
+	var overTime=0;
+	var systemTextElement;
+
+//RESUME SCRIPT RELAY...
+  function resume(){
+
+  	if (overTime != 0){
+  		overTime++;
+  	}
+
+  	if (overTime == 10){
+  		window.cancelAnimationFrame(myReq);
+  	}
+  	
+    systemTextElement.globalCompositeOperation = "source-over";
+    systemTextElement.shadowBlur = 0; 
+    systemTextElement.fillStyle = "hsla(0,0%,0%,0.4)";
+    systemTextElement.fillRect(0,0,w,h);
+    systemTextElement.shadowColor = "hsla(120,100%,50%,0.5)";
+    systemTextElement.shadowBlur = 9;
+    systemTextElement.fillStyle = "hsla(120,100%,20%,1)";
+    systemTextElement.globalCompositeOperation = "lighter";
+  	_s.forEach(function(t, i) {
+      if (i <= y) {
+        if (i == y) {
+        	t = t.substr(0, x); 
+        }
+        systemTextElement.fillText(t, 20, 15+i*16);
+      }
+	});
+    if(stop == 0){      
+	systemTextElement.fillStyle = "hsla(120,100%,50%,1)";
+	systemTextElement.fillRect(20+systemTextElement.measureText(_s[y].substr(0, x)).width, 17+y*16, 10, 14);
+	x++;
+
+ 
+
+	if (x >= _s[y].length) {
+		y++; x = 0;
+	}
+		
+	// if (y*16 > innerHeight-200) { 
+	// 	systemTextElement.translate(0, -0.5);
+	// }
+	
+	if (y >= _s.length) {
+    	stop = 1;
+    	overTime++;
+	}
+
+  }
+}
+
+function resetValue() {
+	x = 0; 
+	y = 0; 
+    stop = 0;
+    overTime=0;
+}
+
+function setup(textContent) {
+	resetValue();
+	configCanvasLength(textContent);
+
+	var c = document.getElementById('systemText');
+	systemTextElement = c.getContext('2d');
+	_s = textContent.split("\n");
+	systemTextElement.textBaseline = "top";
+	systemTextElement.font = "1.1em monospace";
+}
+
+function relay(){
+	  myReq = window.requestAnimFrame(relay);
+	  resume();
+}
+
+function configCanvasLength(message){
+	var canvas = document.getElementById('systemText');
+      	  var canvasContext = canvas.getContext('2d');
+      	  var newLength = canvasContext.measureText(message).width + 50;
+      	  if ( newLength > canvas.width){
+      	  	canvas.width = String(newLength);
+      	  } else {
+      	  	canvas.width = "300";
+      	  }
+      	  canvas.height = "50";
+
+}
+
+  </script>
+
+
+  <script>
+    Polymer({
+      is: 'system-toast',
+      properties: {
+        textContent: String
+      },
+
+      observers: [
+	    'showToast(textContent)'
+	  ],	
+
+	  attached: function() {
+	  },
+
+      showToast: function(message){
+      	if (message != ""){
+    	  var systemToast = document.querySelector('#systemToast');
+    	  systemToast.show();
+
+    	  setup(message);
+    	  relay();
+    	}
+      }
+    });
+  </script>
+
+</dom-module>

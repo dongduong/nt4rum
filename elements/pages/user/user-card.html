@@ -1,0 +1,83 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+Theses code is property of IceSoft company, VietNam
+-->
+
+<dom-module id="user-card">
+  <link rel="import" type="css" href="../../../styles/items/user-card.css">
+  <template>
+    <section class="container">
+    <div class="row active-with-click">
+        <div class="col-md-4 col-sm-6 col-xs-12">
+    <article id="materialCard" class="material-card Red">
+                <h2>
+                    <span>Christopher Walken</span>
+                    <strong>
+                        <i class="fa fa-fw fa-star"></i>
+                        The Deer Hunter
+                    </strong>
+                </h2>
+                <div class="mc-content">
+                    <div class="img-container">
+                        <img class="img-responsive" src="http://u.lorenzoferrara.net/marlenesco/material-card/thumb-christopher-walken.jpg">
+                    </div>
+                    <div class="mc-description">
+                        He has appeared in more than 100 films and television shows, including The Deer Hunter, Annie Hall, The Prophecy trilogy, The Dogs of War ...
+                    </div>
+                </div>
+                <a id="cardButtonAction" class="mc-btn-action" on-click="cardButtonClick">
+                    <i id="cardFab" class="fa fa-bars"></i>
+                </a>
+                <div class="mc-footer">
+                    <h4>
+                        Social
+                    </h4>
+                    <a class="fa fa-fw fa-facebook"></a>
+                    <a class="fa fa-fw fa-twitter"></a>
+                    <a class="fa fa-fw fa-linkedin"></a>
+                    <a class="fa fa-fw fa-google-plus"></a>
+                </div>
+            </article>
+      </div>
+      </div>
+      </section>
+  </template>
+  <script>
+    Polymer({
+      is: 'user-card',
+      properties: {
+
+      },
+
+      cardButtonClick: function() {
+        console.log("click !");
+        var card = document.getElementById('materialCard');
+        var icon =  document.getElementById('cardFab');
+        icon.classList.add('fa-spin-fast');
+
+        if (card.classList.contains('mc-active')) {
+          card.classList.remove('mc-active');
+
+          window.setTimeout(function() {
+            icon.classList.remove('fa-arrow-left');
+            icon.classList.remove('fa-spin-fast');
+            icon.classList.add('fa-bars');
+
+          }, 800);
+        } else {
+          card.classList.add('mc-active');
+
+          window.setTimeout(function() {
+            icon.classList.remove('fa-bars');
+            icon.classList.remove('fa-spin-fast');
+            icon.classList.add('fa-arrow-left');
+
+          }, 800);
+        }
+      }
+
+
+    });
+  </script>
+</dom-module>

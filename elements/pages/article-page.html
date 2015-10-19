@@ -1,0 +1,77 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+Theses code is property of IceSoft company, VietNam
+-->
+<dom-module id="article-page">
+
+  <style>
+    /*:host {
+      overflow: hidden;
+    }*/
+
+    .container {
+        height: 90vh;
+      }
+
+    neon-animated-pages {
+        height: 100%;
+    }
+  </style>
+  
+  <template>
+    <!-- local DOM for your element -->
+
+   <!--  <paper-material elevation="1">
+      <h2 class="paper-font-display2">Article</h2>
+      <p>This is the article section</p>
+    </paper-material> -->
+    <div class="container" layout vertical center>
+      <neon-animated-pages id="pages" selected="0">
+
+        <article-grid on-tile-click="_onTileClick"></article-grid>
+
+        <fullsize-page-with-card id="fullsize-card" hero-id="hero" on-click="_onFullsizeClick">
+        </fullsize-page-with-card>
+
+      </neon-animated-pages>
+    </div>
+
+    <!-- <commercial-section></commercial-section> -->
+
+  </template>
+
+  <script>
+    // element registration
+    Polymer({
+      is: "article-page",
+
+      // add properties and methods on the element's prototype
+
+      properties: {
+        // declare properties for the element's public API
+        greeting: {
+          type: String,
+          value: "Hello!"
+        }
+      },
+
+      attached: function(){
+        // this.async(function () {
+        //     this.$.pages.select(0);
+        // });
+      },
+
+      _onTileClick : function(event) {
+        this.$['fullsize-card'].color = event.detail.data.color;
+        this.$.pages.selected = 1;
+      },
+
+      _onFullsizeClick : function(event) {
+        this.$.pages.selected = 0;
+      }
+
+    });
+  </script>
+
+</dom-module>

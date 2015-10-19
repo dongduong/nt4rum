@@ -1,0 +1,229 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+Theses code is property of IceSoft company, VietNam
+-->
+<dom-module id="user-page">
+
+  <style>
+    /* CSS rules for your element */
+    .container {
+      height: 90vh;
+    }
+
+    #userPanel{
+      width: 100%;
+      height: 100%;
+    }
+
+    .paper-header {
+        height: 60px;
+        font-size: 16px;
+        line-height: 60px;
+        padding: 0 10px;
+        color: white;
+        transition: height 0.2s;
+      }
+
+    .paper-header.tall {
+        height: 120px;
+      }
+
+    .blue .paper-header {
+        background-color: var(--paper-light-blue-500);
+      }
+
+    /*.blue .content {
+        background: linear-gradient(white, #b3e5fc);
+      }*/
+
+    .content {
+        height: 2000px;
+      }
+
+    .tabs {
+      margin-left: 500px;
+    }
+
+    .paper-header.has-shadow  .tabs {
+      margin-left: 50px;
+      margin-bottom: 0;
+    }
+
+    .paper-header .userCard {
+      position: absolute;
+      /*background-color: #bbb;*/
+      margin-left: 50px;
+      width: 300px;
+      height: 100px;
+      margin-top: -20px;
+    }
+
+    paper-tab a {
+    text-decoration: none;
+    color: var(--tab-link-color);
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    font-family: 'Roboto', 'Noto', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 24px;
+    min-height: 48px;
+    padding: 0 16px;
+  }
+
+  paper-tab iron-icon {
+    margin-right: 10px;
+    opacity: 0.84;
+  }
+
+  </style>
+  
+  <template>
+    <!-- local DOM for your element -->
+
+    <div class="container" layout vertical center>
+      <paper-header-panel id="userPanel" mode="waterfall-tall" class="blue" on-content-scroll="scrollHandler">
+        <div class="paper-header">
+          <div class="headerContent" layout horizontal>
+            <div class="userCard">
+              <user-img-card>
+                <img src="{{userAvatar}}" alt="Dong's photo">
+                <span>{{userName}}</span>
+              </user-img-card>
+              <!-- <user-card></user-card> -->
+            </div>
+
+            <div class="tabs">
+              <paper-tabs selected="0" noink>
+                <paper-tab link>
+                  <a route="user-timeline" href="{{urlForUser('user-timeline')}}">
+                    <iron-icon icon="av:web"></iron-icon>
+                    <span>Timeline</span>
+                  </a>
+                </paper-tab>
+                <paper-tab link>
+                  <a route="user-about" href="{{urlForUser('user-about')}}">
+                    <iron-icon icon="info"></iron-icon>
+                    <span>About</span>
+                  </a>
+                </paper-tab>
+                <paper-tab link>
+                  <a route="user-friend" href="{{urlForUser('user-friend')}}">
+                    <iron-icon icon="social:people"></iron-icon>
+                    <span>Friend</span>
+                  </a>
+                </paper-tab>
+                <paper-tab link>
+                  <a route="user-photo" href="{{urlForUser('user-photo')}}">
+                    <iron-icon icon="image:photo"></iron-icon>
+                    <span>Photo</span>
+                  </a>
+                </paper-tab>
+              </paper-tabs>
+            </div>
+          </div>
+        </div>
+        <div class="content">
+          <more-route-selector>
+              <iron-pages>
+                <section route="users">
+                   <paper-material elevation="1">
+                     <!-- <h2 class="paper-font-display2">Users</h2>
+                     <p>This is the users section</p > -->
+                     <user-list></user-list>
+                  </paper-material>
+                </section>
+                <section route="user-timeline">
+                  <paper-material elevation="1">
+                     <h2 class="paper-font-display2">Timeline</h2>
+                     <p>This is the Timeline section</p >
+                  </paper-material>
+                </section>
+                <section route="user-about">
+                  <paper-material elevation="1">
+                     <h2 class="paper-font-display2">About</h2>
+                     <p>This is the About section</p >
+                  </paper-material>
+                </section>
+                <section route="user-friend">
+                  <paper-material elevation="1">
+                     <h2 class="paper-font-display2">Friend</h2>
+                     <p>This is the Friend section</p >
+                  </paper-material>
+                </section>
+                <section route="user-photo">
+                  <paper-material elevation="1">
+                     <h2 class="paper-font-display2">Photo</h2>
+                     <p>This is the Photo section</p >
+                  </paper-material>
+                </section>
+              </iron-pages>
+          </more-route-selector>
+        </div>
+      </paper-header-panel>
+
+    </div>
+
+
+    
+  </template>
+
+  <script>
+    // element registration
+    Polymer({
+      is: "user-page",
+
+      // add properties and methods on the element's prototype
+
+      properties: {
+        // declare properties for the element's public API
+        uid: String,
+        userName: String,
+        userAvatar: String
+      },
+
+      ready: function() {
+        // console.log("user-page ready");
+        uid="";
+        userName="";
+        userAvatar="";
+      },
+
+      attached: function() {
+        // console.log("user-page attached");
+        // userManager.getListAllUsers();
+      },
+
+      initUserPage: function(uid, user, avatarURL) {
+        this.uid=uid;
+        this.userName=user;
+        this.userAvatar=avatarURL;
+        // userManager.getUserInfoByUID();
+      },
+
+      scrollHandler: function(event) {
+        var scroller = event.detail.target;
+        console.log(scroller.scrollTop);
+      },
+
+      urlForUser: function(page) {
+        var authData = userManager.getAuthData();
+        if (authData != null){
+          return MoreRouting.urlFor(page, {name: authData.uid});
+        }
+      }
+
+    });
+  </script>
+
+</dom-module>

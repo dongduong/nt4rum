@@ -1,0 +1,81 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+Theses code is property of IceSoft company, VietNam
+-->
+
+<dom-module id="search-bar">
+  <!-- <link rel="import" type="css" href="../../styles/search-bar.css"> -->
+
+  <style>
+    .search{
+       width: 100%;
+       --paper-input-container-color: rgba(255, 255, 255, 0.8);
+       --paper-input-container-focus-color: #ffffff;
+       --paper-input-container-input-color: #ffffff;
+    }
+
+    .search input{
+      bottom: 5px;
+    }
+
+  </style>
+
+  <template>
+        <!-- <paper-input class="search" on-keyup="onKeyPress" no-label-float>
+          <paper-icon-button id="button" prefix icon="search" on-click="toggleSearch">
+          </paper-icon-button>
+        </paper-input> -->
+        <paper-input-container class="search" on-keyup="onKeyPress" no-label-float>
+          <paper-icon-button id="button" prefix icon="search" on-click="toggleSearch"></paper-icon-button>
+          <input is="iron-input" bind-value="{{username}}">
+      </paper-input-container>
+  </template>
+  <script>
+    Polymer({
+      is: 'search-bar',
+      properties: {
+        showingSearch: {
+          type: Boolean,
+          value: false
+        }
+      },
+
+      // openSearch: function() {
+      //   if (this.showingSearch) {
+      //     return;
+      //   }
+      //   this.showingSearch = !this.showingSearch;
+      //   this.classList.toggle('search-on');
+      //   this.$.button.icon='arrow-back';
+      // },
+
+      // closeSearch: function() {
+      //   if (!this.showingSearch) {
+      //     return;
+      //   }
+      //   this.showingSearch = !this.showingSearch;
+      //   this.classList.toggle('search-on');
+      //   this.$.button.icon='search';
+      // },
+
+
+      toggleSearch: function(e, detail, sender) {
+        console.log("open Search input");
+      },
+
+      onKeyPress: function(e, detail, sender) {
+        this.showSearchSuggest();
+        if (e.keyCode == 13) { // Enter
+          //TODO : start searching
+          console.log("starting search process");
+        }
+      },
+
+      showSearchSuggest: function() {
+        //TODO: show list of search suggestion
+      }
+      
+    });
+  </script>
+</dom-module>

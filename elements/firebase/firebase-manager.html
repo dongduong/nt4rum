@@ -1,0 +1,42 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+Theses code is property of IceSoft company, VietNam
+-->
+<dom-module id="firebase-manager">
+
+  <style>
+    /* CSS rules for your element */
+  </style>
+  
+  <template>
+    <!-- local DOM for your element -->
+    <user-manager id="userManager"></user-manager>
+  </template>
+
+  <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+  <script>
+    // element registration
+    Polymer({
+      is: "firebase-manager",
+
+      // add properties and methods on the element's prototype
+
+      properties: {
+        // declare properties for the element's public API
+        referFireBase: Object,
+        userManager:Object
+      },
+
+      ready: function(){
+        this.referFireBase = new Firebase("https://nhatrangforum.firebaseio.com");
+      },
+
+      attached: function(){
+        this.userManager = document.querySelector('#userManager');
+      }
+
+    });
+  </script>
+
+</dom-module>

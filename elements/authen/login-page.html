@@ -1,0 +1,259 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+These code is property of IceSoft company, VietNam
+-->
+
+<dom-module id="login-page">
+<link rel="import" type="css" href="./login-page.css">
+<style>
+    .divFab {
+      position: absolute;
+      padding: 20px 0;
+      margin-right: 0px;
+    }
+
+    paper-fab {
+      background: #fff;
+      margin-right:2em;
+      
+    }
+
+    paper-fab.facebookFab {
+     --iron-icon-height: 44px;
+      --iron-icon-width: 44px;
+    }
+
+    paper-fab.twitterFab {
+      --iron-icon-height: 48px;
+      --iron-icon-width: 48px;
+    }
+
+    paper-fab.googleFab {
+      --iron-icon-height: 46px;
+      --iron-icon-width: 46px;
+    }
+
+    .divSignIn {
+      background: #FFF;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      display: block;
+      left: 50%;
+      max-width: 400px;
+      position: absolute;
+      top: 50%;
+      -ms-transform: translate(-50%, -50%);
+      -webkit-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+      width: 90%;
+      z-index: 2;
+    }
+
+    .header {
+      font-size: 1.5em;
+      color: #00BCD4;
+      font-weight: lighter;
+    }
+
+    .indent {
+      display: block;
+      margin: auto;
+      padding: 27px 0;
+      width: 85%;
+    }
+
+    paper-input {
+      width: auto;
+      font-size: 16px;
+      -webkit-transition: 0.2s border-bottom;
+      transition: 0.2s border-bottom;
+    }
+
+    paper-button {
+      margin-top: 20px;
+      margin-left: 0px;
+
+      background: #2196f3;
+      border-radius: 2px;
+      color: #FFF;
+      cursor: pointer;
+      position: relative;
+      font-size: 16px;
+      opacity: 0.999;
+      -webkit-transition: 0.2s ease background;
+      transition: .2s ease background;
+      width: 100%;
+    }
+
+</style>
+  <template id="loginTemplate">
+    <div class="divSignIn" flex layout vertical>
+        <div class="indent" layout vertical>
+          <div class="header">Sign In</div>
+          <paper-input label="Username" char-counter auto-validate pattern="[a-zA-Z0-9._%+-@]*" maxlength="25" error-message="letters or numbers only!" value="{{username}}"></paper-input>
+          <paper-input label="Password" type="password" maxlength="24" value="{{password}}"></paper-input>
+          <div>
+            <paper-button raised on-click="clickLogin">Login</paper-button>
+          </div>
+        </div>
+        <div class="divFab">
+          <paper-fab mini title="Sign in with Facebook" class="facebookFab" src="../../images/icons/facebook_circle.png" on-click="clickLoginAsFacebook"></paper-fab>
+          <paper-fab mini title="Sign in with Twitter" class="twitterFab" src="../../images/icons/twitter_circle.png" on-click="clickLoginAsTwitter"></paper-fab>
+          <paper-fab mini title="Sign in with Google+" class="googleFab" src="../../images/icons/google_circle.png" on-click="clickLoginAsGooglePlus"></paper-fab>
+          <paper-fab icon="add" on-click="clickAddUser"></paper-fab>
+        </div>
+        
+    </div>
+
+    
+
+    <div class="bg-boxes">
+      <svg width="300px" height="100%" id="col1">
+        <rect width="150px" height="150px" x="75px" y="75px" class="bubble" id="bub1" />
+      </svg>
+      <svg width="200px" height="100%" id="col2">
+        <rect width="100px" height="100px" x="50px" y="50px" class="bubble" id="bub2" />
+      </svg>
+      <svg width="260px" height="100%" id="col3">
+          <rect width="130px" height="130px" x="65px" y="65px" class="bubble" id="bub3" />
+      </svg>
+      <svg width="160px" height="100%" id="col4">
+          <rect width="80px" height="80px" x="40px" y="40px" class="bubble" id="bub4" />
+      </svg>
+      <svg width="240px" height="100%" id="col5">
+          <rect width="120px" height="120px" x="60px" y="60px" class="bubble" id="bub5" />
+      </svg>
+      <!--Here is a triangle-->
+      <svg width="200px" height="100%" id="col6">
+          <polygon points="50,150 100,50 150,150" class="bubble" id="bub6" />
+      </svg>
+      <svg width="200px" height="100%" id="col7">
+          <rect width="100px" height="100px" x="50px" y="50px" class="bubble" id="bub7" />
+      </svg>
+      <svg width="200px" height="100%" id="col8">
+          <rect width="100px" height="100px" x="50px" y="50px" class="bubble" id="bub8" />
+      </svg>
+      <svg width="200px" height="100%" id="col9">
+          <rect width="100px" height="100px" x="50px" y="50px" class="bubble" id="bub9" />
+      </svg>
+      <svg width="200px" height="100%" id="col10">
+          <rect width="100px" height="100px" x="50px" y="50px" class="bubble" id="bub10" />
+      </svg>
+      <svg width="100px" height="100%" id="col11">
+          <rect width="50px" height="50px" x="25px" y="25px" class="bubble" id="bub11" />
+      </svg>
+    </div>
+  <paper-toast id="loginToast" text="Login...."></paper-toast>
+  </template>
+
+  <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+  <script>
+    // element registration
+    Polymer({
+      is: "login-page",
+
+      //add properties and methods on the element's prototype
+
+      properties: {
+        // declare properties for username and password
+        username: String,
+        password: String,
+        refFirebase: Object
+      },
+
+      ready: function() {
+        this.username="";
+        this.password="";
+        this.refFirebase = new Firebase("https://nhatrangforum.firebaseio.com");
+      },
+
+      clickLogin: function() {
+        this.refFirebase.authWithPassword({
+          email    : this.username,
+          password : this.password
+        }, function(error, authData) {
+          if (error) {
+            console.log("Login Failed!", error);
+          } else {
+            console.log("Authenticated successfully with payload:", authData);
+            loginPage.fire('login');
+          }
+        });
+      },
+
+      clickLoginAsFacebook: function() {
+        var loginPage = this;
+        this.refFirebase.authWithOAuthPopup("facebook", function(error, authData) {
+          if (error) {
+            console.log("Login Failed!", error);
+          } else {
+            console.log("Authenticated successfully with payload:", authData);
+            loginPage.fire('login');
+          }
+        });
+      },
+
+      clickLoginAsTwitter: function() {
+        this.refFirebase.authWithOAuthPopup("twitter", function(error, authData) {
+        if (error) {
+          console.log("Login Failed!", error);
+        } else {
+          console.log("Authenticated successfully with payload:", authData);
+        }
+      });
+      },
+
+      clickLoginAsGooglePlus: function() {
+        this.refFirebase.authWithOAuthPopup("google", function(error, authData) {
+          if (error) {
+            console.log("Login Failed!", error);
+          } else {
+            console.log("Authenticated successfully with payload:", authData);
+          }
+        });
+      },
+
+      clickAddUser: function() {
+        this.refFirebase.createUser({
+          email    : "dhdong1510@gmail.com",
+          password : "conlaumoibiet"
+        }, function(error, userData) {
+          if (error) {
+            console.log("Error creating user:", error);
+          } else {
+            console.log("Successfully created user account with uid:", userData.uid);
+          }
+        });
+      },
+      
+      showToast: function(message){
+    	  var toast = document.querySelector('#loginToast');
+    	  toast.text = message;
+    	  toast.show();
+      },
+
+      loginResponse: function() {
+    	 /* //console.log( this.$.loginEndpoint.lastResponse );
+    	  var response = this.$.loginEndpoint.lastResponse;
+    	  if(response.status == "SUCCESS"){
+    		  console.log( this.$.loginEndpoint.lastResponse.result );
+    		  this.showToast("Login successful !");
+    		  this.fire('login');
+    	  }
+    	  else
+    	  {
+    		  this.showToast("Login failed !");
+    		  //this.$.loginEndpoint.
+    	  }*/
+      },
+
+      loginError: function() {
+    	 // var error = this.$.loginEndpoint.lastError;
+    	 // this.showToast(error);
+      }
+
+    });
+  </script>
+
+</dom-module>

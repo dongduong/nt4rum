@@ -1,0 +1,201 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+Theses code is property of IceSoft company, VietNam
+-->
+<dom-module id="user-manager">
+
+  <style>
+    /* CSS rules for your element */
+  </style>
+  
+  <template>
+  </template>
+
+  <script>
+    // element registration
+    Polymer({
+      is: "user-manager",
+
+      // add properties and methods on the element's prototype
+
+      properties: {
+        // declare properties for the element's public API
+        allUsers: Object,
+      },
+
+      ready: function(){
+        //console.log("user manager ready");
+      },
+
+      getAuthData: function(){
+        return firebaseManager.referFireBase.getAuth();
+      },
+
+      logOutFireBase: function(){
+        firebaseManager.referFireBase.unauth();
+      },
+
+      authWithPassword: function(username, password){
+        firebaseManager.referFireBase.authWithPassword({
+          email    : username,
+          password : password
+        }, function(error, authData) {
+          if (error) {
+            userManager.authenFailedProcess(error);
+          } else {
+            MoreRouting.navigateTo('home', null);
+            mainPage.configMainPage(authData);
+          }   
+        });
+      },
+
+      authWithOAuth: function(provider){
+          firebaseManager.referFireBase.authWithOAuthPopup(provider, function(error, authData) {
+            if (error) {
+                userManager.authenFailedProcess(error);
+            } else {
+                MoreRouting.navigateTo('home', null);
+                mainPage.configMainPage(authData);
+            }
+        });
+      },
+
+      createUser: function(username, password) {
+        firebaseManager.referFireBase.createUser({
+          email    : username,
+          password : password
+        }, function(error, userData) {
+          if (error) {
+            userManager.authenFailedProcess(error);
+          } else {
+              console.log("Successfully created user account");
+              //TODO: consider to add full name in the end instead of UID
+              app.showSystemNotify("Successfully created new user account" + userData.uid);
+              //userManager.storeUserData();
+              // MoreRouting.navigateTo('home', null);
+              // mainPage.configMainPage(userData);
+              loginPage.clickCloseRegister();
+          }
+        });
+      },
+
+      checkStoreUserData: function(authData) {
+        //TODO: check if new user account, maybe login at the first time
+        userManager.storeNewUserData(authData);
+      },
+
+      // save the user's profile into the database so we can list users,
+      // use them in Security and Firebase Rules, and show profiles
+      storeNewUserData: function(authData) {
+           if (authData) {
+            firebaseManager.referFireBase.child("web").child("users").child(authData.uid).set({
+              provider: authData.provider,
+              name: userManager.getName(authData),
+              image: userManager.getAvatarUrl(authData)
+            });
+          }
+      },
+
+      getName: function(authData) {
+        switch(authData.provider) {
+           case 'password':
+             return authData.password.email.replace(/@.*/, '');
+           case 'twitter':
+             return authData.twitter.displayName;
+           case 'facebook':
+             return authData.facebook.displayName;
+        }
+      },
+
+      getAvatarUrl: function(authData) {
+        switch(authData.provider) {
+           case 'password':
+             return authData.password.profileImageURL;
+           case 'twitter':
+             return authData.twitter.profileImageURL;
+           case 'facebook':
+             return authData.facebook.profileImageURL;
+        }
+      },
+
+      getListAllUsers: function() {
+        firebaseManager.referFireBase.child("web").child("users").on("value", function(snapshot) {
+          // console.log(snapshot.val());
+          this.allUsers = snapshot.val();
+          var result = snapshot.val();
+          for(var k in result) {
+             console.log(k, result[k]);
+          }
+        }, function (errorObject) {
+          console.log("The read failed: " + errorObject.code);
+        });
+      },
+
+      getUserInfoByUID: function(uid) {
+        console.log(this.allUsers);
+      },
+
+      //TODO: don't use sytem notify
+      authenFailedProcess: function(error) {
+        if (error) {
+          switch (error.code) {
+            case "INVALID_EMAIL":
+              app.showSystemNotify("The specified user account email is invalid.");
+              break;
+            case "INVALID_PASSWORD":
+              app.showSystemNotify("The specified user account password is incorrect.");
+              break;
+            case "INVALID_USER":
+              app.showSystemNotify("The specified user account does not exist.");
+              break;
+            case "AUTHENTICATION_DISABLED":
+              app.showSystemNotify("The requested authentication provider is disabled.");
+              break;
+            case "EMAIL_TAKEN":
+              app.showSystemNotify("The specified user account email is already in use.");
+              break;
+            case "INVALID_ARGUMENTS":
+              app.showSystemNotify("The specified credentials are malformed or incomplete.");
+              break;
+            case "INVALID_CONFIGURATION":
+              app.showSystemNotify("The requested authentication provider is misconfigured, and the request cannot complete.");
+              break;
+            case "INVALID_CREDENTIALS":
+              app.showSystemNotify("The specified authentication credentials are invalid.");
+              break;
+            case "INVALID_ORIGIN":
+              app.showSystemNotify("The web origin for the request is not in your list of approved request origins.");
+              break;
+            case "INVALID_PROVIDER":
+              app.showSystemNotify("The requested authentication provider does not exist.");
+              break;
+            case "INVALID_TOKEN":
+              app.showSystemNotify("The specified authentication token is invalid.");
+              break;
+            case "NETWORK_ERROR":
+              app.showSystemNotify("Network error. Can't contact to authentication server.");
+              break;
+            case "PROVIDER_ERROR":
+              app.showSystemNotify("A third-party provider error: ", error);
+              break;
+            case "TRANSPORT_UNAVAILABLE":
+              app.showSystemNotify("The requested login method is not available in the user's browser environment.");
+              break;
+            case "USER_CANCELLED":
+              app.showSystemNotify("The current authentication request was cancelled by the user.");
+              break;
+            case "USER_DENIED":
+              app.showSystemNotify("The user did not authorize the application.");
+              break;
+            case "UNKNOWN_ERROR":
+            default:
+              app.showSystemNotify("An unknown error occurred ", error);
+          }
+        }
+      }
+
+    });
+  </script>
+
+</dom-module>

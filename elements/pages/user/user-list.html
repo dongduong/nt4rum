@@ -1,0 +1,51 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+Theses code is property of IceSoft company, VietNam
+-->
+<dom-module id="user-list">
+<style>
+	
+</style>
+<template>
+
+	<template is="dom-repeat" items="[[userList]]">
+        <!-- <template is="dom-bind">
+        <iron-list items="[[data]]" as="item"> -->
+          <paper-material elevation="1">
+            <div class="item">
+                <div class="primary">[[item.name]]</div>
+                <div class="secondary">[[item.provider]]</div>
+            </div>
+          </paper-material>
+     </template>
+
+</template>
+<script>
+	Polymer({
+		is: 'user-list',
+		properties: {
+			userList : Object
+		},
+
+		ready: function() {
+			this.getListAllUsers();
+		},
+
+		getListAllUsers: function() {
+	        firebaseManager.referFireBase.child("web").child("users").on("value", function(snapshot) {
+	          // console.log(snapshot.val());
+	          this.userList = snapshot.val();
+	          console.log(this.userList);
+	          // var result = snapshot.val();
+	          // for(var k in result) {
+	          //    console.log(k, result[k]);
+	          // }
+	        }, function (errorObject) {
+	          console.log("The read failed: " + errorObject.code);
+	        });
+      	}
+
+	});
+</script>
+</dom-module>
